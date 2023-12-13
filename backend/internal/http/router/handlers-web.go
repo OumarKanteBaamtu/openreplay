@@ -585,3 +585,30 @@ func (e *Router) imagesUploaderHandlerWeb(w http.ResponseWriter, r *http.Request
 	}
 	ResponseOK(w, startTime, r.URL.Path, 0)
 }
+
+func (e *Router) getConditions(w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	bodySize := 0
+
+	// Check authorization
+	sessInfo, err := e.services.Tokenizer.ParseFromHTTPRequest(r)
+	if err != nil {
+		ResponseWithError(w, http.StatusUnauthorized, err, startTime, r.URL.Path, bodySize)
+		return
+	}
+
+	sess, err := e.services.Sessions.Get(sessInfo.ID)
+	if err != nil {
+		ResponseWithError(w, http.StatusForbidden, err, startTime, r.URL.Path, bodySize)
+		return
+	}
+
+	// Get task info
+	info, err := e.services.Conditions.Get(sess.ProjectID)
+	if err != nil {
+		ResponseWithError(w, http.StatusInternalServerError, err, startTime, r.URL.Path, bodySize)
+		return
+	}
+
+	ResponseWithJSON(w, info, startTime, r.URL.Path, bodySize)
+}
