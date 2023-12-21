@@ -15,6 +15,7 @@ type StartSessionRequest struct {
 	UserID          string  `json:"userID"`
 	DoNotRecord     bool    `json:"doNotRecord"` // start record session or not
 	BufferDiff      uint64  `json:"bufferDiff"`  // buffer diff in ms for start record session
+	Condition       string  `json:"condition"`   // condition for start record session
 }
 
 type StartSessionResponse struct {
