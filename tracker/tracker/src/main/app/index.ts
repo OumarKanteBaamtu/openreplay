@@ -774,7 +774,11 @@ export default class App {
     this.clearBuffers()
   }
 
-  private _start(startOpts: StartOptions = {}, resetByWorker = false): Promise<StartPromiseReturn> {
+  private _start(
+    startOpts: StartOptions = {},
+    resetByWorker = false,
+    conditionName?: string,
+  ): Promise<StartPromiseReturn> {
     const isColdStart = this.activityState === ActivityState.ColdStart
     if (isColdStart && this.coldInterval) {
       clearInterval(this.coldInterval)
@@ -849,6 +853,7 @@ export default class App {
           deviceMemory,
           jsHeapSizeLimit,
           timezone: getTimezone(),
+          condition: conditionName,
         }),
       })
       .then((r) => {
